@@ -1,16 +1,15 @@
 library(tidyverse)
 library(labelled)
 
-# 1. iso ----
-input = "C:/Users/Apple/Desktop/DQQ paper project/fsci/Rcodes/sInputs"
-iso3 = read.csv(paste(input,"/iso3.csv", sep = ""))
+# 1. Iso  ----
+iso3 = read.csv("csv inputs/iso3.csv")
 glimpse(iso3)
 
 
 iso <- iso3 %>%
   rename(country = name) %>%
   rename(ISO = iso3) %>%
-  set_variable_labels(country = "Country name", ISO = "ISO-alpha3 code") %>%
+  set_variable_labels(country = "Country name", ISO = "ISO-alpha3 code")
 
 look_for(iso)
 
@@ -71,13 +70,10 @@ isotest <- iso %>%
 i <- iso$country %in% names(UNnames)
 iso$country[i] <- UNnames[iso$country[i]]
 
-look_for(iso)
-glimpse(iso)
-
 # save as csv
 write.csv(iso, "csv output/iso.csv", row.names = FALSE)
 
-# 2. g2015_2005_1 ----
+# 2. UNStatus ----
 g2015 <- read.csv("csv inputs/g2015_2005_1.csv")
 look_for(g2015)
 glimpse(g2015)
@@ -127,9 +123,8 @@ g2015gb <- g2015 %>%
   mutate(
     territoryof = case_when(UN_status == 5 ~ STATUS)
   )
+
 g2015gb
-#levels(g2015gb$UN_status_detail)
-#str(g2015gb$UN_status_detail)
 
 UNname1 <- c(
   "Antigua & Barbuda" = "Antigua and Barbuda",
@@ -168,9 +163,9 @@ UNStatus <- UNStatus %>%
     DISP_AREA = case_when(country == "South Sudan" | country == "Serbia" | country == "Montenegro" ~ "NO", .default = DISP_AREA)
   ) %>%
   filter(country != "Serbia and Montenegro") %>%
-  arrange(country) %>%
-  print(n = 300)
+  arrange(country)
 
+UNStatus
 write.csv(x = UNStatus, file = "csv output/UNstatus.csv", row.names = FALSE)
 
 
